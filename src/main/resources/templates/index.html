@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>IRC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="/webjars/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<!--    <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/irc.js"></script>
+
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">IRC</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/logout}">Wyloguj</a>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:href="@{/login}">Zaloguj</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="mt-5">Witam Cię <b th:text="${username}"></b> w IRC!</h1>
+            <p class="lead">To komunikator, który powstał w dwie godziny!</p>
+        </div>
+    </div>
+    <div class="row">
+        <div id="allMessages">
+            <div th:each="msg : ${allMessages}">
+                <i th:text="${msg.getDateFormatted()}"></i>
+                <code th:text="${msg.author}"></code>
+                <span th:text="${msg.text}"></span>
+            </div>
+        </div>
+        <br/>
+        <br/>
+
+        <form action="#" onsubmit="sendMessage(event)">
+            <label for="newMessage">Wiadomość do wysłania: </label>
+            <input type="text" id="newMessage" placeholder="Tu wpisz wiadomość">
+            <button type="submit" >Wyślij</button>
+        </form>
+    </div>
+</div>
+
+<!--&lt;!&ndash; Bootstrap core JavaScript &ndash;&gt;-->
+<!--<script src="vendor/jquery/jquery.slim.min.js"></script>-->
+<!--<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+
+</body>
+</html>
